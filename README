@@ -1,10 +1,8 @@
 **README - Balanceador de Carga con Sitios Node.js**
 
-**TP3 - Carpeta Node.js**
-
 Este repositorio contiene los archivos necesarios para implementar un balanceador de carga con sitios Node.js utilizando Docker y HAProxy.
 
-### Pasos para la Configuración
+### Configuración
 
 #### 1. Crear Carpeta Contenedora
 
