@@ -1,0 +1,62 @@
+**README - Balanceador de Carga con Sitios Node.js**
+
+**TP3 - Carpeta Node.js**
+
+Este repositorio contiene los archivos necesarios para implementar un balanceador de carga con sitios Node.js utilizando Docker y HAProxy.
+
+### Pasos para la Configuración
+
+#### 1. Crear Carpeta Contenedora
+
+```bash
+mkdir nodejs
+cd nodejs
+```
+
+#### 1.5 Crear una Nueva Red Docker
+
+```bash
+docker network create rednode
+```
+
+#### 2. Crear Carpetas para Front y Balanceador
+
+Crear tres carpetas: dos para las aplicaciones frontales y una para el balanceador.
+
+```bash
+mkdir aplicacion-node
+mkdir aplicacion-node2
+mkdir balanceador
+```
+
+Dentro de cada carpeta `aplicacion-node`, habrá un servidor básico que muestra un mensaje.
+
+#### 3. Crear Contenedores de Node.js
+
+Ejecutar los siguientes comandos para cada aplicación Node.js:
+
+```bash
+docker run --name nodewebuno -p 8090:81 --network rednode -v $(pwd)/aplicacion-node:/usr/src/app -w /usr/src/app -d node:14 bash -c "node index.js"
+```
+
+```bash
+docker run --name nodewebdos -p 8089:81 --network rednode -v $(pwd)/aplicacion-node2:/usr/src/app -w /usr/src/app -d node:14 bash -c "node index.js"
+```
+
+#### 4. Crear Balanceador de Carga con HAProxy
+
+```bash
+docker run -d --name haproxynode --network rednode -p 8095:81 -v $(pwd)/balanceador/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:latest
+```
+
+Este comando crea un contenedor de HAProxy, vinculado a la red donde se encuentran los dos servidores Node.js.
+
+**Nota:** Asegúrate de ajustar las rutas y puertos según tu configuración en el comando Docker.
+
+### Acceder a los Sitios
+
+- Frontend 1: [http://localhost:8090](http://localhost:8090)
+- Frontend 2: [http://localhost:8089](http://localhost:8089)
+- Balanceador de Carga: [http://localhost:8095](http://localhost:8095)
+
+¡Listo! Ahora puedes acceder a tus aplicaciones Node.js a través del balanceador de carga.
